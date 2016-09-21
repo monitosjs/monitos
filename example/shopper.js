@@ -22,31 +22,29 @@ process.on('SIGINT', function () {
 });
 
 let chimp = new Monito({
-    persona: {
-        init: (monito) => {
-            monito.state = 'register';
+    init: (monito) => {
+        monito.state = 'register';
+    },
+    states: {
+        register: (monito, next) => {
+            next(null, 'getProfile');
         },
-        states: {
-            register: (monito, next) => {
-                next(null, 'getProfile');
-            },
-            getProfile: (monito, next) => {
-                next(null, {
-                    browse: 4
-                }, 'shop');
-            },
-            browse: (monito, next) => {
-                next(null, {
-                    browse: 6
-                }, 'shop');
-            },
-            shop: (monito, next) => {
-                next(null, 'logout');
-            },
-            logout: (monito, next) => {
-                monito.stop();
-                next();
-            }
+        getProfile: (monito, next) => {
+            next(null, {
+                browse: 4
+            }, 'shop');
+        },
+        browse: (monito, next) => {
+            next(null, {
+                browse: 6
+            }, 'shop');
+        },
+        shop: (monito, next) => {
+            next(null, 'logout');
+        },
+        logout: (monito, next) => {
+            monito.stop();
+            next();
         }
     }
 });

@@ -1,0 +1,24 @@
+{
+  "name": "monitos",
+  "version": "0.1.0",
+  "description": "A monkey testing module",
+  "main": "index.js",
+  "engines": {
+    "node": "^4.5.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "testing",
+    "monkey",
+    "test"
+  ],
+  "author": "Arturo Martinez <dunkelheit@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "async": "2.0.1",
+    "d20": "1.4.0",
+    "lodash": "4.16.0"
+  }
+}

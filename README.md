@@ -1,1 +1,1 @@
-A monkey testing tool.
+A monkey testing module.

@@ -10,9 +10,17 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "testing",
-    "monkey",
-    "test"
+    "fsm",
+    "finite",
+    "state",
+    "machines",
+    "automaton",
+    "automata",
+    "d&d",
+    "dungeons",
+    "dragons",
+    "saving",
+    "throw"
   ],
   "author": "Arturo Martinez <dunkelheit@gmail.com>",
   "license": "ISC",
@@ -20,5 +28,15 @@
     "async": "2.0.1",
     "d20": "1.4.0",
     "lodash": "4.16.0"
+  },
+  "devDependencies": {
+    "chai": "3.5.0",
+    "gulp": "3.9.1",
+    "gulp-istanbul": "1.1.1",
+    "gulp-jshint": "2.0.1",
+    "gulp-mocha": "3.0.1",
+    "gulp-shell": "0.5.2",
+    "husky": "0.11.8",
+    "jshint-stylish": "2.2.1"
   }
 }

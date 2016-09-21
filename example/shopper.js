@@ -1,11 +1,9 @@
 'use strict';
 
-var fs = require('fs');
-
 var Monito = require('../lib/index');
 
 const formatter = {
-    state(data, chimp)  {
+    state(data/*, chimp*/)  {
         console.log('* ' + data.message);
     },
     error(data) {
@@ -15,11 +13,6 @@ const formatter = {
         }
     }
 };
-
-process.on('SIGINT', function () {
-    console.log('\n' + chalk.magenta.bold('Ok bye!\n'));
-    process.exit();
-});
 
 let chimp = new Monito({
     init: (monito) => {

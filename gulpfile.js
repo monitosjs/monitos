@@ -4,7 +4,6 @@ var gulp = require('gulp');
 var istanbul = require('gulp-istanbul');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
-var shell = require('gulp-shell');
 
 gulp.task('lint', function () {
     return gulp.src([
@@ -19,7 +18,7 @@ gulp.task('lint', function () {
 });
 
 gulp.task('unit-test', function (done) {
-    gulp.src(['./index.js'])
+    gulp.src(['./lib/**/*.js'])
         .pipe(istanbul())
         .pipe(istanbul.hookRequire())
         .on('finish', function () {
@@ -33,8 +32,6 @@ gulp.task('unit-test', function (done) {
                 .on('end', done);
         });
 });
-
-gulp.task('jsdoc', shell.task('./node_modules/jsdoc/jsdoc.js -r -R README.md lib -d docs/jsdoc'));
 
 gulp.task('test', ['lint', 'unit-test']);
 

@@ -36,7 +36,6 @@ let chimp = new Monito({
             next(null, 'logout');
         },
         logout: (monito, next) => {
-            monito.stop();
             next();
         }
     }

@@ -2,18 +2,6 @@
 
 var Monito = require('../lib/index');
 
-const formatter = {
-    state(data/*, chimp*/)  {
-        console.log('* ' + data.message);
-    },
-    error(data) {
-        console.log('! ' + data.message);
-        if (data.err) {
-            console.log(data.err);
-        }
-    }
-};
-
 let chimp = new Monito({
     init: (monito) => {
         monito.state = 'register';
@@ -36,17 +24,23 @@ let chimp = new Monito({
             next(null, 'logout');
         },
         logout: (monito, next) => {
+            // next(null, 'register'); -- Uncomment to have it running forever
             next();
         }
     }
 });
 
-chimp.on('report', function (data) {
-    if (data.type && formatter[data.type]) {
-        formatter[data.type](data, chimp);
-    } else {
-        console.log(data.message);
-    }
+chimp.on('error', function (err) {
+    console.log('An error has occurred');
+    console.log(err);
+});
+
+chimp.on('state', function (state) {
+    console.log('New state:', state);
+});
+
+chimp.on('end', function () {
+    console.log('Ok bye!');
 });
 
 chimp.start();

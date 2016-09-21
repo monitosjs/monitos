@@ -82,8 +82,11 @@ describe('Monitos', function () {
                 }
             });
             chimp.start();
-            // TODO: Test the error
-            next();
+            chimp.on('error', function (err) {
+                expect(err).to.be.an('error');
+                expect(err).to.have.property('message', 'Something went wrong');
+                next();
+            });
         });
 
         it('Requires the argument "options"', function (next) {
@@ -105,29 +108,30 @@ describe('Monitos', function () {
         });
 
         it('Requires a default next state when there are random transitions', function (next) {
-            var fn = function () {
-                let chimp = new Monito({
-                    init: (monito) => {
-                        monito.state = 'register';
+            let chimp = new Monito({
+                init: (monito) => {
+                    monito.state = 'register';
+                },
+                states: {
+                    register: (monito, next) => {
+                        next(null, 'getProfile');
                     },
-                    states: {
-                        register: (monito, next) => {
-                            next(null, 'getProfile');
-                        },
-                        getProfile: (monito, next) => {
-                            next(null, {
-                                browse: 20
-                            });
-                        },
-                        shop: (monito, next) => {
-                            next();
-                        }
+                    getProfile: (monito, next) => {
+                        next(null, {
+                            browse: 20
+                        });
+                    },
+                    shop: (monito, next) => {
+                        next();
                     }
-                });
-                chimp.start();
-            };
-            expect(fn).to.throw(Error, /There is no default next state/);
-            next();
+                }
+            });
+            chimp.start();
+            chimp.on('error', function (err) {
+                expect(err).to.be.an('error');
+                expect(err).to.have.property('message', 'There is no default next state');
+                next();
+            });
         });
 
         it('Fails when there is an unknon state', function (next) {

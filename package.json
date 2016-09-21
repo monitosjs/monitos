@@ -7,7 +7,16 @@
     "node": "^4.5.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "gulp lint && gulp test",
+    "precommit": "gulp lint",
+    "prepush": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dunkelheit/monitos.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dunkelheit/monitos/issues"
   },
   "keywords": [
     "fsm",

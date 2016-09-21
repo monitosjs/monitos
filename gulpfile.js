@@ -15,7 +15,7 @@ gulp.task('lint', function () {
         .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('unit-test', function (done) {
+gulp.task('test', function (done) {
     gulp.src(['./lib/**/*.js'])
         .pipe(istanbul())
         .pipe(istanbul.hookRequire())
@@ -30,7 +30,5 @@ gulp.task('unit-test', function (done) {
                 .on('end', done);
         });
 });
-
-gulp.task('test', ['lint', 'unit-test']);
 
 gulp.task('default', ['test']);

@@ -1,14 +1,23 @@
 'use strict';
 
+const d20 = require('d20');
 const expect = require('chai').expect;
+const sinon = require('sinon');
 
 const Monito = require('../lib/monito');
 
 describe('Monitos', function () {
 
+    var sandbox = sinon.sandbox.create();
+
+    afterEach(function () {
+        sandbox.restore();
+    });
+
     describe('Happy flows', function () {
 
         it('Runs a state machine with no random transitions', function (next) {
+            var rollSpy = sandbox.spy(d20, 'roll');
             let chimp = new Monito({
                 init: (monito) => {
                     monito.state = 'register';
@@ -33,10 +42,14 @@ describe('Monitos', function () {
                 }
             });
             chimp.start();
-            next();
+            chimp.on('end', function () {
+                expect(rollSpy.callCount).to.equal(0);
+                next();
+            });
         });
 
         it('Runs a state machine with random transitions', function (next) {
+            var rollSpy = sandbox.spy(d20, 'roll');
             let chimp = new Monito({
                 init: (monito) => {
                     monito.state = 'register';
@@ -64,7 +77,10 @@ describe('Monitos', function () {
                 }
             });
             chimp.start();
-            next();
+            chimp.on('end', function () {
+                expect(rollSpy.callCount).to.be.at.least(2);
+                next();
+            });
         });
     });
 
@@ -147,7 +163,9 @@ describe('Monitos', function () {
             });
             chimp.start();
             // TODO: Test the error
-            next();
+            chimp.on('end', function () {
+                next();
+            });
         });
     });
 });

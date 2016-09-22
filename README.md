@@ -48,7 +48,7 @@ new Monito(states, initialState);
 * `states` (`Object`, mandatory) - The state descriptor. An object where the key is the name of the state and
 the value is a function with signature `(Object monito, Function callback)`. The function `callback` has the
 following signature:
-    * `callback([Object error], [Object savingThrows], [String defaultNextState])`
+    * `callback([Object error[, Object savingThrows[, String defaultNextState]]])`
         * `error` (`Object`, optional) - Like in most of the callback signatures, an optional errorsis the first argument. `null` if everything went fine.
         * `savingThrows` (`Object`, optional) - An object where the key is the name of a potential state candidate and the value is the difficulty of the saving throw to go into that state
         * `defaultNextState` (`String`, optional) - Name of the default next state. If not present, the state machine will stop.

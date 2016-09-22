@@ -3,32 +3,27 @@
 var Monito = require('../lib/index');
 
 let chimp = new Monito({
-    init: (monito) => {
-        monito.state = 'register';
+    register: (monito, next) => {
+        next(null, 'getProfile');
     },
-    states: {
-        register: (monito, next) => {
-            next(null, 'getProfile');
-        },
-        getProfile: (monito, next) => {
-            next(null, {
-                browse: 4
-            }, 'shop');
-        },
-        browse: (monito, next) => {
-            next(null, {
-                browse: 6
-            }, 'shop');
-        },
-        shop: (monito, next) => {
-            next(null, 'logout');
-        },
-        logout: (monito, next) => {
-            // next(null, 'register'); -- Uncomment to have it running forever
-            next();
-        }
+    getProfile: (monito, next) => {
+        next(null, {
+            browse: 4
+        }, 'shop');
+    },
+    browse: (monito, next) => {
+        next(null, {
+            browse: 6
+        }, 'shop');
+    },
+    shop: (monito, next) => {
+        next(null, 'logout');
+    },
+    logout: (monito, next) => {
+        // next(null, 'register'); -- Uncomment to have it running forever
+        next();
     }
-});
+}, 'register');
 
 chimp.on('error', function (err) {
     console.log('An error has occurred');

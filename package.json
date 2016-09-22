@@ -2,7 +2,7 @@
   "name": "monitos",
   "version": "0.2.0",
   "description": "State machines meet Dungeons & Dragons",
-  "main": "index.js",
+  "main": "lib/monito.js",
   "engines": {
     "node": "^4.5.0"
   },

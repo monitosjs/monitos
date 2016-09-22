@@ -8,7 +8,8 @@ var mocha = require('gulp-mocha');
 gulp.task('lint', function () {
     return gulp.src([
             './lib/**/*.js',
-            './example/**/*.js'
+            './example/**/*.js',
+            './test/**/*.js'
         ])
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'))

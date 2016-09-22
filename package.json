@@ -1,7 +1,7 @@
 {
   "name": "monitos",
   "version": "0.1.2",
-  "description": "A monkey testing module",
+  "description": "State machines meet Dungeons & Dragons",
   "main": "index.js",
   "engines": {
     "node": "^4.5.0"

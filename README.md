@@ -35,6 +35,8 @@ let chimp = new Monito({
 chimp.start();
 ```
 
+See the [full code of the example](example/shopper.js).
+
 ## Usage
 
 ```

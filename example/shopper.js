@@ -1,6 +1,6 @@
 'use strict';
 
-var Monito = require('../lib/index');
+var Monito = require('../lib/monito');
 
 let chimp = new Monito({
     register: (monito, next) => {

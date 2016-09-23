@@ -21,8 +21,8 @@ let chimp = new Monito({
     },
     browse: (monito, next) => {
         next(null, {
-            browse: 6               // If your dice rolls 6 or more, go to "browse"
-        }, 'shop');                 // Otherwise, by default, go to "shop"
+            browse: monito => 6     // You can also use functions
+        }, 'shop');                 
     },
     shop: (monito, next) => {
         next(null, 'logout');       // Go straight to the state "logout"
@@ -59,6 +59,20 @@ following signature:
 * `error(Object err)` - Whenever an error occurred. The first and only argument is the error object.
 * `state(String state)` - Fired when we switch to a new state. The first and only argument is the name of the state we are switching to.
 * `end` - Fired when the state machine comes to an end.
+
+### API
+
+Given:
+
+```
+var chimp = new Monito(states, initialState);
+```
+
+The following functions are available:
+
+* `monito.getTransitionChallenge() -> Function` - Gets the function currently used as a transition challenge.
+* `monito.setTransitionChallenge(Function challenge)` - Sets a custom challenge to be used in transitions. If the function returns _truthy_, the challenged will be passed. Otherwise, it won't.
+* `monito.start()` - Starts the state machine.
 
 ## Testing
 

@@ -13,7 +13,7 @@ let chimp = new Monito({
     },
     browse: (monito, next) => {
         next(null, {
-            browse: 6
+            browse: (/* monito */) => 6
         }, 'shop');
     },
     shop: (monito, next) => {

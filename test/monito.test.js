@@ -87,6 +87,130 @@ describe('Monitos', function () {
                 next();
             });
         });
+
+        it('Accepts functions as valid challenges, and the challenge is passed', function (next) {
+            var states = [];
+            let chimp = new Monito({
+                open: (monito, next) => {
+                    next(null, {
+                        broken: function (monito) {
+                            expect(monito).to.be.an('object');
+                            return 0;
+                        }
+                    }, 'close');
+                },
+                broken: (monito, next) => {
+                    next(null, 'close');
+                },
+                close: (monito, next) => {
+                    next();
+                }
+            }, 'open');
+            chimp.start();
+            chimp.on('state', function (state) {
+                states.push(state);
+            });
+            chimp.on('end', function () {
+                expect(states).to.have.length(2);
+                expect(states[0]).to.equal('broken');
+                expect(states[1]).to.equal('close');
+                next();
+            });
+        });
+
+        it('Accepts functions as valid challenges, and the challenge is failed', function (next) {
+            var states = [];
+            let chimp = new Monito({
+                open: (monito, next) => {
+                    next(null, {
+                        broken: function (monito) {
+                            expect(monito).to.be.an('object');
+                            return 20;
+                        }
+                    }, 'close');
+                },
+                broken: (monito, next) => {
+                    next(null, 'close');
+                },
+                close: (monito, next) => {
+                    next();
+                }
+            }, 'open');
+            chimp.start();
+            chimp.on('state', function (state) {
+                states.push(state);
+            });
+            chimp.on('end', function () {
+                expect(states).to.have.length(1);
+                expect(states[0]).to.equal('close');
+                next();
+            });
+        });
+
+        it('Allows setting and getting a custom challenge, and this challenge is passed', function (next) {
+            var states = [];
+            let chimp = new Monito({
+                open: (monito, next) => {
+                    next(null, {
+                        broken: function (/* monito */) {
+                            return 'pass';
+                        }
+                    }, 'close');
+                },
+                broken: (monito, next) => {
+                    next(null, 'close');
+                },
+                close: (monito, next) => {
+                    next();
+                }
+            }, 'open');
+            chimp.setTransitionChallenge(function (difficulty) {
+                return difficulty === 'pass';
+            });
+            expect(chimp.getTransitionChallenge()).to.be.a('function');
+            chimp.start();
+            chimp.on('state', function (state) {
+                states.push(state);
+            });
+            chimp.on('end', function () {
+                expect(states).to.have.length(2);
+                expect(states[0]).to.equal('broken');
+                expect(states[1]).to.equal('close');
+                next();
+            });
+        });
+
+        it('Allows setting and getting a custom challenge, and this challenge is passed', function (next) {
+            var states = [];
+            let chimp = new Monito({
+                open: (monito, next) => {
+                    next(null, {
+                        broken: function (/* monito */) {
+                            return 'not passed';
+                        }
+                    }, 'close');
+                },
+                broken: (monito, next) => {
+                    next(null, 'close');
+                },
+                close: (monito, next) => {
+                    next();
+                }
+            }, 'open');
+            chimp.setTransitionChallenge(function (difficulty) {
+                return difficulty === 'pass';
+            });
+            expect(chimp.getTransitionChallenge()).to.be.a('function');
+            chimp.start();
+            chimp.on('state', function (state) {
+                states.push(state);
+            });
+            chimp.on('end', function () {
+                expect(states).to.have.length(1);
+                expect(states[0]).to.equal('close');
+                next();
+            });
+        });
     });
 
     describe('Unhappy flows', function () {

@@ -125,7 +125,7 @@ describe('Monitos', function () {
                     next(null, {
                         broken: function (monito) {
                             expect(monito).to.be.an('object');
-                            return 20;
+                            return 21;
                         }
                     }, 'close');
                 },

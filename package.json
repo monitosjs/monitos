@@ -4,7 +4,7 @@
   "description": "State machines meet Dungeons & Dragons",
   "main": "lib/monito.js",
   "engines": {
-    "node": "^4.5.0"
+    "node": "^4.6.0"
   },
   "scripts": {
     "test": "gulp lint && gulp test",
@@ -34,9 +34,9 @@
   "author": "Arturo Martinez <dunkelheit@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "async": "2.0.1",
-    "d20": "1.4.0",
-    "lodash": "4.16.2"
+    "async": "2.1.1",
+    "d20": "1.4.1",
+    "lodash": "4.16.4"
   },
   "devDependencies": {
     "chai": "3.5.0",
@@ -44,7 +44,7 @@
     "gulp-istanbul": "1.1.1",
     "gulp-jshint": "2.0.1",
     "gulp-mocha": "3.0.1",
-    "husky": "0.11.8",
+    "husky": "0.11.9",
     "jshint-stylish": "2.2.1",
     "request": "2.75.0",
     "restify": "4.1.1",

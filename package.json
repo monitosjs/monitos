@@ -1,6 +1,6 @@
 {
   "name": "monitos",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "State machines meet Dungeons & Dragons",
   "main": "lib/monito.js",
   "engines": {

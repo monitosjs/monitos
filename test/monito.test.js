@@ -42,13 +42,50 @@ describe('Monitos', () => {
             });
             chimp.on('end', () => {
                 expect(rollSpy.callCount).to.equal(0);
-                expect(states).to.have.length(4);
-                expect(states[0]).to.equal('getProfile');
-                expect(states[1]).to.equal('browse');
-                expect(states[2]).to.equal('shop');
-                expect(states[3]).to.equal('logout');
+                expect(states).to.have.length(5);
+                expect(states[0]).to.equal('register');
+                expect(states[1]).to.equal('getProfile');
+                expect(states[2]).to.equal('browse');
+                expect(states[3]).to.equal('shop');
+                expect(states[4]).to.equal('logout');
                 next();
             });
+        });
+
+        it('Does not matter the order in which we call on() and start()', next => {
+            var rollSpy = sandbox.spy(d20, 'roll');
+            var states = [];
+            let chimp = new Monito({
+                register: (monito, next) => {
+                    next(null, 'getProfile');
+                },
+                getProfile: (monito, next) => {
+                    next(null, 'browse');
+                },
+                browse: (monito, next) => {
+                    next(null, 'shop');
+                },
+                shop: (monito, next) => {
+                    next(null, 'logout');
+                },
+                logout: (monito, next) => {
+                    next();
+                }
+            }, 'register');
+            chimp.on('state', state => {
+                states.push(state);
+            });
+            chimp.on('end', () => {
+                expect(rollSpy.callCount).to.equal(0);
+                expect(states).to.have.length(5);
+                expect(states[0]).to.equal('register');
+                expect(states[1]).to.equal('getProfile');
+                expect(states[2]).to.equal('browse');
+                expect(states[3]).to.equal('shop');
+                expect(states[4]).to.equal('logout');
+                next();
+            });
+            chimp.start();
         });
 
         it('Runs a state machine with random transitions', next => {
@@ -81,8 +118,8 @@ describe('Monitos', () => {
             });
             chimp.on('end', () => {
                 expect(rollSpy.callCount).to.be.at.least(1);
-                expect(states).to.have.length.least(3);
-                expect(states[0]).to.equal('getProfile');
+                expect(states).to.have.length.least(4);
+                expect(states[0]).to.equal('register');
                 expect(states[states.length - 1]).to.equal('logout');
                 next();
             });
@@ -111,9 +148,10 @@ describe('Monitos', () => {
                 states.push(state);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(2);
-                expect(states[0]).to.equal('broken');
-                expect(states[1]).to.equal('close');
+                expect(states).to.have.length(3);
+                expect(states[0]).to.equal('open');
+                expect(states[1]).to.equal('broken');
+                expect(states[2]).to.equal('close');
                 next();
             });
         });
@@ -141,8 +179,9 @@ describe('Monitos', () => {
                 states.push(state);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(1);
-                expect(states[0]).to.equal('close');
+                expect(states).to.have.length(2);
+                expect(states[0]).to.equal('open');
+                expect(states[1]).to.equal('close');
                 next();
             });
         });
@@ -173,9 +212,10 @@ describe('Monitos', () => {
                 states.push(state);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(2);
-                expect(states[0]).to.equal('broken');
-                expect(states[1]).to.equal('close');
+                expect(states).to.have.length(3);
+                expect(states[0]).to.equal('open');
+                expect(states[1]).to.equal('broken');
+                expect(states[2]).to.equal('close');
                 next();
             });
         });
@@ -206,8 +246,9 @@ describe('Monitos', () => {
                 states.push(state);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(1);
-                expect(states[0]).to.equal('close');
+                expect(states).to.have.length(2);
+                expect(states[0]).to.equal('open');
+                expect(states[1]).to.equal('close');
                 next();
             });
         });
@@ -312,9 +353,10 @@ describe('Monitos', () => {
                 states.push(state);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(2);
-                expect(states[0]).to.equal('broken');
-                expect(states[1]).to.equal('close');
+                expect(states).to.have.length(3);
+                expect(states[0]).to.equal('open');
+                expect(states[1]).to.equal('broken');
+                expect(states[2]).to.equal('close');
                 next();
             });
         });
@@ -343,8 +385,9 @@ describe('Monitos', () => {
                 states.push(state);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(1);
-                expect(states[0]).to.equal('close');
+                expect(states).to.have.length(2);
+                expect(states[0]).to.equal('open');
+                expect(states[1]).to.equal('close');
                 next();
             });
         });

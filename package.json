@@ -32,7 +32,7 @@
     "throw"
   ],
   "author": "Arturo Martinez <dunkelheit@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "async": "2.1.1",
     "d20": "1.4.1",

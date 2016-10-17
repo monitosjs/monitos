@@ -34,7 +34,7 @@
   "author": "Arturo Martinez <dunkelheit@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "async": "2.1.1",
+    "async": "2.1.2",
     "d20": "1.4.1",
     "lodash": "4.16.4"
   },

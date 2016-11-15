@@ -316,6 +316,48 @@ describe('Monitos', () => {
                 next();
             });
         });
+
+        it('Can be stopped on demand', next => {
+            var transitions = [];
+            let chimp = new Monito({
+                register: (next) => {
+                    next(null, 'getProfile');
+                },
+                getProfile: function (next) {
+                    this.alive = false;
+                    next(null, 'browse');
+                },
+                browse: (next) => {
+                    next(null, 'shop');
+                },
+                shop: (next) => {
+                    next(null, 'logout');
+                },
+                logout: (next) => {
+                    next();
+                }
+            }, 'register');
+            chimp.start();
+            chimp.on('transition', data => {
+                transitions.push(data);
+            });
+            var endCalled = false;
+            chimp.on('end', () => {
+                expect(endCalled).to.equal(false);
+                endCalled = true;
+                expect(transitions).to.have.length(2);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'register'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'register',
+                    nextState: 'getProfile'
+                });
+                next();
+            });
+        });
+
     });
 
     describe('Unhappy flows', () => {
@@ -376,7 +418,7 @@ describe('Monitos', () => {
             });
         });
 
-        it('Fails when there is an unknon state', next => {
+        it('Fails when there is an unknown state', next => {
             let chimp = new Monito({
                 register: (next) => {
                     next(null, 'somethingUnknown');

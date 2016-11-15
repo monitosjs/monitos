@@ -1,11 +1,11 @@
 'use strict';
 
-var gulp = require('gulp');
-var istanbul = require('gulp-istanbul');
-var jshint = require('gulp-jshint');
-var mocha = require('gulp-mocha');
+const gulp = require('gulp');
+const istanbul = require('gulp-istanbul');
+const jshint = require('gulp-jshint');
+const mocha = require('gulp-mocha');
 
-gulp.task('lint', function () {
+gulp.task('lint', () => {
     return gulp.src([
             './lib/**/*.js',
             './example/**/*.js',
@@ -16,11 +16,11 @@ gulp.task('lint', function () {
         .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('test', function (done) {
+gulp.task('test', done => {
     gulp.src(['./lib/**/*.js'])
         .pipe(istanbul())
         .pipe(istanbul.hookRequire())
-        .on('finish', function () {
+        .on('finish', () => {
             gulp.src(['./test/**/*.test.js'])
                 .pipe(mocha({
                     reporter: 'spec'

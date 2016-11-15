@@ -358,6 +358,41 @@ describe('Monitos', () => {
             });
         });
 
+        it('Stops a challenge as soon as we have a success', next => {
+            var transitions = [];
+            let chimp = new Monito({
+                start: (next) => {
+                    next(null, {
+                        successGuaranteed: 0,
+                        thisShouldNeverHappen: 0
+                    }, 'thisShouldNeverHappen');
+                },
+                successGuaranteed: next => {
+                    next();
+                },
+                thisShouldNeverHappen: next => {
+                    next();
+                }
+            }, 'start');
+            chimp.start();
+            chimp.on('transition', data => {
+                transitions.push(data);
+            });
+            chimp.on('end', () => {
+                expect(transitions).to.have.length(2);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'start'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'start',
+                    nextState: 'successGuaranteed'
+                });
+                next();
+            });
+        });
+
+
     });
 
     describe('Unhappy flows', () => {

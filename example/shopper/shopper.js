@@ -93,8 +93,8 @@ chimp.on('error', function (err) {
     console.log(err);
 });
 
-chimp.on('state', function (state) {
-    console.log('New state:', state);
+chimp.on('transition', function (data) {
+    console.log(data.previousState + ' -> ' + data.nextState);
 });
 
 chimp.on('end', function () {

@@ -18,7 +18,7 @@ describe('Monitos', () => {
 
         it('Runs a state machine with no random transitions', next => {
             var rollSpy = sandbox.spy(d20, 'roll');
-            var states = [];
+            var transitions = [];
             let chimp = new Monito({
                 register: (next) => {
                     next(null, 'getProfile');
@@ -37,24 +37,39 @@ describe('Monitos', () => {
                 }
             }, 'register');
             chimp.start();
-            chimp.on('state', state => {
-                states.push(state);
+            chimp.on('transition', data => {
+                transitions.push(data);
             });
             chimp.on('end', () => {
                 expect(rollSpy.callCount).to.equal(0);
-                expect(states).to.have.length(5);
-                expect(states[0]).to.equal('register');
-                expect(states[1]).to.equal('getProfile');
-                expect(states[2]).to.equal('browse');
-                expect(states[3]).to.equal('shop');
-                expect(states[4]).to.equal('logout');
+                expect(transitions).to.have.length(5);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'register'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'register',
+                    nextState: 'getProfile'
+                });
+                expect(transitions[2]).to.deep.equal({
+                    previousState: 'getProfile',
+                    nextState: 'browse'
+                });
+                expect(transitions[3]).to.deep.equal({
+                    previousState: 'browse',
+                    nextState: 'shop'
+                });
+                expect(transitions[4]).to.deep.equal({
+                    previousState: 'shop',
+                    nextState: 'logout'
+                });
                 next();
             });
         });
 
         it('Does not matter the order in which we call on() and start()', next => {
             var rollSpy = sandbox.spy(d20, 'roll');
-            var states = [];
+            var transitions = [];
             let chimp = new Monito({
                 register: (next) => {
                     next(null, 'getProfile');
@@ -72,17 +87,32 @@ describe('Monitos', () => {
                     next();
                 }
             }, 'register');
-            chimp.on('state', state => {
-                states.push(state);
+            chimp.on('transition', data => {
+                transitions.push(data);
             });
             chimp.on('end', () => {
                 expect(rollSpy.callCount).to.equal(0);
-                expect(states).to.have.length(5);
-                expect(states[0]).to.equal('register');
-                expect(states[1]).to.equal('getProfile');
-                expect(states[2]).to.equal('browse');
-                expect(states[3]).to.equal('shop');
-                expect(states[4]).to.equal('logout');
+                expect(transitions).to.have.length(5);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'register'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'register',
+                    nextState: 'getProfile'
+                });
+                expect(transitions[2]).to.deep.equal({
+                    previousState: 'getProfile',
+                    nextState: 'browse'
+                });
+                expect(transitions[3]).to.deep.equal({
+                    previousState: 'browse',
+                    nextState: 'shop'
+                });
+                expect(transitions[4]).to.deep.equal({
+                    previousState: 'shop',
+                    nextState: 'logout'
+                });
                 next();
             });
             chimp.start();
@@ -90,7 +120,7 @@ describe('Monitos', () => {
 
         it('Runs a state machine with random transitions', next => {
             var rollSpy = sandbox.spy(d20, 'roll');
-            var states = [];
+            var transitions = [];
             let chimp = new Monito({
                 register: (next) => {
                     next(null, 'getProfile');
@@ -113,20 +143,25 @@ describe('Monitos', () => {
                 }
             }, 'register');
             chimp.start();
-            chimp.on('state', state => {
-                states.push(state);
+            chimp.on('transition', data => {
+                transitions.push(data);
             });
             chimp.on('end', () => {
                 expect(rollSpy.callCount).to.be.at.least(1);
-                expect(states).to.have.length.least(4);
-                expect(states[0]).to.equal('register');
-                expect(states[states.length - 1]).to.equal('logout');
+                expect(transitions).to.have.length.least(4);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'register'
+                });
+                const lastTransition = transitions[transitions.length - 1];
+                expect(lastTransition.previousState).to.be.a('string');
+                expect(lastTransition.nextState).to.equal('logout');
                 next();
             });
         });
 
         it('Accepts functions as valid challenges, and the challenge is passed', next => {
-            var states = [];
+            var transitions = [];
             let chimp = new Monito({
                 open: (next) => {
                     next(null, {
@@ -144,20 +179,29 @@ describe('Monitos', () => {
                 }
             }, 'open');
             chimp.start();
-            chimp.on('state', state => {
-                states.push(state);
+            chimp.on('transition', data => {
+                transitions.push(data);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(3);
-                expect(states[0]).to.equal('open');
-                expect(states[1]).to.equal('broken');
-                expect(states[2]).to.equal('close');
+                expect(transitions).to.have.length(3);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'open'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'open',
+                    nextState: 'broken'
+                });
+                expect(transitions[2]).to.deep.equal({
+                    previousState: 'broken',
+                    nextState: 'close'
+                });
                 next();
             });
         });
 
         it('Accepts functions as valid challenges, and the challenge is failed', next => {
-            var states = [];
+            var transitions = [];
             let chimp = new Monito({
                 open: (next) => {
                     next(null, {
@@ -175,19 +219,24 @@ describe('Monitos', () => {
                 }
             }, 'open');
             chimp.start();
-            chimp.on('state', state => {
-                states.push(state);
+            chimp.on('transition', data => {
+                transitions.push(data);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(2);
-                expect(states[0]).to.equal('open');
-                expect(states[1]).to.equal('close');
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'open'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'open',
+                    nextState: 'close'
+                });
                 next();
             });
         });
 
         it('Allows setting and getting a custom challenge, and this challenge is passed', next => {
-            var states = [];
+            var transitions = [];
             let chimp = new Monito({
                 open: (next) => {
                     next(null, {
@@ -208,20 +257,29 @@ describe('Monitos', () => {
             });
             expect(chimp.getTransitionChallenge()).to.be.a('function');
             chimp.start();
-            chimp.on('state', state => {
-                states.push(state);
+            chimp.on('transition', data => {
+                transitions.push(data);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(3);
-                expect(states[0]).to.equal('open');
-                expect(states[1]).to.equal('broken');
-                expect(states[2]).to.equal('close');
+                expect(transitions).to.have.length(3);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'open'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'open',
+                    nextState: 'broken'
+                });
+                expect(transitions[2]).to.deep.equal({
+                    previousState: 'broken',
+                    nextState: 'close'
+                });
                 next();
             });
         });
 
         it('Allows setting and getting a custom challenge, and this challenge is passed', next => {
-            var states = [];
+            var transitions = [];
             let chimp = new Monito({
                 open: (next) => {
                     next(null, {
@@ -242,13 +300,19 @@ describe('Monitos', () => {
             });
             expect(chimp.getTransitionChallenge()).to.be.a('function');
             chimp.start();
-            chimp.on('state', state => {
-                states.push(state);
+            chimp.on('transition', data => {
+                transitions.push(data);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(2);
-                expect(states[0]).to.equal('open');
-                expect(states[1]).to.equal('close');
+                expect(transitions).to.have.length(2);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'open'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'open',
+                    nextState: 'close'
+                });
                 next();
             });
         });
@@ -330,7 +394,7 @@ describe('Monitos', () => {
     describe('In-depth saving throw transition tests', () => {
 
         it('Saves the throw and goes into the specified state', next => {
-            var states = [];
+            var transitions = [];
             var difficulty = 10;
             sandbox.stub(d20, 'roll', (/* dice */) => {
                 return difficulty + 1; // Passes the saving throw
@@ -349,20 +413,29 @@ describe('Monitos', () => {
                 }
             }, 'open');
             chimp.start();
-            chimp.on('state', state => {
-                states.push(state);
+            chimp.on('transition', data => {
+                transitions.push(data);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(3);
-                expect(states[0]).to.equal('open');
-                expect(states[1]).to.equal('broken');
-                expect(states[2]).to.equal('close');
+                expect(transitions).to.have.length(3);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'open'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'open',
+                    nextState: 'broken'
+                });
+                expect(transitions[2]).to.deep.equal({
+                    previousState: 'broken',
+                    nextState: 'close'
+                });
                 next();
             });
         });
 
         it('Fails the throw and goes into the default state', next => {
-            var states = [];
+            var transitions = [];
             var difficulty = 10;
             sandbox.stub(d20, 'roll', (/* dice */) => {
                 return difficulty - 1; // Fails the saving throw
@@ -381,13 +454,19 @@ describe('Monitos', () => {
                 }
             }, 'open');
             chimp.start();
-            chimp.on('state', state => {
-                states.push(state);
+            chimp.on('transition', data => {
+                transitions.push(data);
             });
             chimp.on('end', () => {
-                expect(states).to.have.length(2);
-                expect(states[0]).to.equal('open');
-                expect(states[1]).to.equal('close');
+                expect(transitions).to.have.length(2);
+                expect(transitions[0]).to.deep.equal({
+                    previousState: undefined,
+                    nextState: 'open'
+                });
+                expect(transitions[1]).to.deep.equal({
+                    previousState: 'open',
+                    nextState: 'close'
+                });
                 next();
             });
         });

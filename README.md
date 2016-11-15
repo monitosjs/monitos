@@ -57,7 +57,9 @@ The function `callback` has the following signature:
 ### Events
 
 * `error(Object err)` - Whenever an error occurred. The first and only argument is the error object.
-* `state(String state)` - Fired when we switch to a new state. The first and only argument is the name of the state we are switching to.
+* `transition(Object data)` - Fired when there is a transition to a new state. The object `data ` contains the two following `String` properties:
+    * `previousState` - Name of the previous state, `undefined` if this is the first transition of the state machine.
+    * `nextState` - Name of state the machine is transitioning to.
 * `end` - Fired when the state machine comes to an end.
 
 ### API

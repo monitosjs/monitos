@@ -20,19 +20,19 @@ describe('Monitos', () => {
             var rollSpy = sandbox.spy(d20, 'roll');
             var states = [];
             let chimp = new Monito({
-                register: (monito, next) => {
+                register: (next) => {
                     next(null, 'getProfile');
                 },
-                getProfile: (monito, next) => {
+                getProfile: (next) => {
                     next(null, 'browse');
                 },
-                browse: (monito, next) => {
+                browse: (next) => {
                     next(null, 'shop');
                 },
-                shop: (monito, next) => {
+                shop: (next) => {
                     next(null, 'logout');
                 },
-                logout: (monito, next) => {
+                logout: (next) => {
                     next();
                 }
             }, 'register');
@@ -56,19 +56,19 @@ describe('Monitos', () => {
             var rollSpy = sandbox.spy(d20, 'roll');
             var states = [];
             let chimp = new Monito({
-                register: (monito, next) => {
+                register: (next) => {
                     next(null, 'getProfile');
                 },
-                getProfile: (monito, next) => {
+                getProfile: (next) => {
                     next(null, 'browse');
                 },
-                browse: (monito, next) => {
+                browse: (next) => {
                     next(null, 'shop');
                 },
-                shop: (monito, next) => {
+                shop: (next) => {
                     next(null, 'logout');
                 },
-                logout: (monito, next) => {
+                logout: (next) => {
                     next();
                 }
             }, 'register');
@@ -92,23 +92,23 @@ describe('Monitos', () => {
             var rollSpy = sandbox.spy(d20, 'roll');
             var states = [];
             let chimp = new Monito({
-                register: (monito, next) => {
+                register: (next) => {
                     next(null, 'getProfile');
                 },
-                getProfile: (monito, next) => {
+                getProfile: (next) => {
                     next(null, {
                         browse: 4
                     }, 'shop');
                 },
-                browse: (monito, next) => {
+                browse: (next) => {
                     next(null, {
                         browse: 6
                     }, 'shop');
                 },
-                shop: (monito, next) => {
+                shop: (next) => {
                     next(null, 'logout');
                 },
-                logout: (monito, next) => {
+                logout: (next) => {
                     next();
                 }
             }, 'register');
@@ -128,7 +128,7 @@ describe('Monitos', () => {
         it('Accepts functions as valid challenges, and the challenge is passed', next => {
             var states = [];
             let chimp = new Monito({
-                open: (monito, next) => {
+                open: (next) => {
                     next(null, {
                         broken: (monito) => {
                             expect(monito).to.be.an('object');
@@ -136,10 +136,10 @@ describe('Monitos', () => {
                         }
                     }, 'close');
                 },
-                broken: (monito, next) => {
+                broken: (next) => {
                     next(null, 'close');
                 },
-                close: (monito, next) => {
+                close: (next) => {
                     next();
                 }
             }, 'open');
@@ -159,7 +159,7 @@ describe('Monitos', () => {
         it('Accepts functions as valid challenges, and the challenge is failed', next => {
             var states = [];
             let chimp = new Monito({
-                open: (monito, next) => {
+                open: (next) => {
                     next(null, {
                         broken: monito => {
                             expect(monito).to.be.an('object');
@@ -167,10 +167,10 @@ describe('Monitos', () => {
                         }
                     }, 'close');
                 },
-                broken: (monito, next) => {
+                broken: (next) => {
                     next(null, 'close');
                 },
-                close: (monito, next) => {
+                close: (next) => {
                     next();
                 }
             }, 'open');
@@ -189,17 +189,17 @@ describe('Monitos', () => {
         it('Allows setting and getting a custom challenge, and this challenge is passed', next => {
             var states = [];
             let chimp = new Monito({
-                open: (monito, next) => {
+                open: (next) => {
                     next(null, {
                         broken: (/* monito */) => {
                             return 'pass';
                         }
                     }, 'close');
                 },
-                broken: (monito, next) => {
+                broken: (next) => {
                     next(null, 'close');
                 },
-                close: (monito, next) => {
+                close: (next) => {
                     next();
                 }
             }, 'open');
@@ -223,17 +223,17 @@ describe('Monitos', () => {
         it('Allows setting and getting a custom challenge, and this challenge is passed', next => {
             var states = [];
             let chimp = new Monito({
-                open: (monito, next) => {
+                open: (next) => {
                     next(null, {
                         broken: (/* monito */) => {
                             return 'not passed';
                         }
                     }, 'close');
                 },
-                broken: (monito, next) => {
+                broken: (next) => {
                     next(null, 'close');
                 },
-                close: (monito, next) => {
+                close: (next) => {
                     next();
                 }
             }, 'open');
@@ -258,7 +258,7 @@ describe('Monitos', () => {
 
         it('Handles errors', next => {
             let chimp = new Monito({
-                register: (monito, next) => {
+                register: (next) => {
                     next(new Error('Something went wrong'));
                 }
             }, 'register');
@@ -281,7 +281,7 @@ describe('Monitos', () => {
         it('Requires the argument "options.states"', next => {
             var fn = () => {
                 new Monito({
-                    foo: (monito, next) => {
+                    foo: (next) => {
                         next();
                     }
                 });
@@ -292,15 +292,15 @@ describe('Monitos', () => {
 
         it('Requires a default next state when there are random transitions', next => {
             let chimp = new Monito({
-                register: (monito, next) => {
+                register: (next) => {
                     next(null, 'getProfile');
                 },
-                getProfile: (monito, next) => {
+                getProfile: (next) => {
                     next(null, {
                         browse: 20
                     });
                 },
-                shop: (monito, next) => {
+                shop: (next) => {
                     next();
                 }
             }, 'register');
@@ -314,7 +314,7 @@ describe('Monitos', () => {
 
         it('Fails when there is an unknon state', next => {
             let chimp = new Monito({
-                register: (monito, next) => {
+                register: (next) => {
                     next(null, 'somethingUnknown');
                 }
             }, 'register');
@@ -336,15 +336,15 @@ describe('Monitos', () => {
                 return difficulty + 1; // Passes the saving throw
             });
             let chimp = new Monito({
-                open: (monito, next) => {
+                open: (next) => {
                     next(null, {
                         broken: 10
                     }, 'close');
                 },
-                broken: (monito, next) => {
+                broken: (next) => {
                     next(null, 'close');
                 },
-                close: (monito, next) => {
+                close: (next) => {
                     next();
                 }
             }, 'open');
@@ -368,15 +368,15 @@ describe('Monitos', () => {
                 return difficulty - 1; // Fails the saving throw
             });
             let chimp = new Monito({
-                open: (monito, next) => {
+                open: (next) => {
                     next(null, {
                         broken: difficulty
                     }, 'close');
                 },
-                broken: (monito, next) => {
+                broken: (next) => {
                     next(null, 'close');
                 },
-                close: (monito, next) => {
+                close: (next) => {
                     next();
                 }
             }, 'open');

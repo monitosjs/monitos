@@ -11,23 +11,23 @@ Example:
 
 ```javascript
 let chimp = new Monito({
-    register: (monito, next) => {
+    register: (next) => {
         next(null, 'getProfile');   // Go straight to the state "getProfile"
     },
-    getProfile: (monito, next) => {
+    getProfile: (next) => {
         next(null, {
             browse: 4               // If your dice rolls 4 or more, go to "browse"
         }, 'shop');                 // Otherwise, by default, go to "shop"
     },
-    browse: (monito, next) => {
+    browse: (next) => {
         next(null, {
             browse: monito => 6     // You can also use functions
         }, 'shop');                 
     },
-    shop: (monito, next) => {
+    shop: (next) => {
         next(null, 'logout');       // Go straight to the state "logout"
     },
-    logout: (monito, next) => {
+    logout: (next) => {
         next();                     // This will be the last state
     }
 }, 'register');                     // Initial state
@@ -46,8 +46,8 @@ new Monito(states, initialState);
 ### Arguments
 
 * `states` (`Object`, mandatory) - The state descriptor. An object where the key is the name of the state and
-the value is a function with signature `(Object monito, Function callback)`. The function `callback` has the
-following signature:
+the value is a function with signature `(Function callback)`, whose `this` is the monito instanc itself. 
+The function `callback` has the following signature:
     * `callback([Object error[, Object savingThrows[, String defaultNextState]]])`
         * `error` (`Object`, optional) - Like in most of the callback signatures, an optional errorsis the first argument. `null` if everything went fine.
         * `savingThrows` (`Object`, optional) - An object where the key is the name of a potential state candidate and the value is the difficulty of the saving throw to go into that state

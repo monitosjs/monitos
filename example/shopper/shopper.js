@@ -56,31 +56,31 @@ class Shopper extends Monito {
 }
 
 const states = {
-    register: (monito, next) => {
-        monito.register((err/*, data*/) => {
+    register: function (next) {
+        this.register((err/*, data*/) => {
             next(err, 'getProfile');
         });
     },
-    getProfile: (monito, next) => {
-        monito.getProfile((err/*, data*/) => {
+    getProfile: function (next) {
+        this.getProfile((err/*, data*/) => {
             next(err, {
                 browse: 4
             }, 'shop');
         });
     },
-    browse: (monito, next) => {
-        monito.browse((err/*, data*/) => {
+    browse: function (next) {
+        this.browse((err/*, data*/) => {
             next(err, {
                 browse: (/* monito */) => 6
             }, 'shop');
         });
     },
-    shop: (monito, next) => {
-        monito.register((err/*, data*/) => {
+    shop: function (next) {
+        this.register((err/*, data*/) => {
             next(err, 'logout');
         });
     },
-    logout: (monito, next) => {
+    logout: function (next) {
         // next(null, 'register'); -- Uncomment to have it running forever
         next();
     }

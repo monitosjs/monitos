@@ -51,7 +51,7 @@ chimp.on('error', data => {
 });
 ```
 
-See the [full code of the example](example/shopper/shopper.js).
+See the [full code of the example](example/shopper.js).
 
 ## Usage
 

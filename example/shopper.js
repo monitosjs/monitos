@@ -1,27 +1,6 @@
 'use strict';
 
-var request = require('request');
-
-var server = require('./server');
-
-const Monito = require('../../lib/monito');
-
-const baseRequestOptions = {
-    baseUrl: 'http://localhost:8080/',
-    method: 'get',
-    json: true,
-    headers: {
-        'Content-Type': 'application/json',
-        Accepts: 'application/json'
-    },
-    pool: {
-        maxSockets: 10240
-    },
-    gzip: true,
-    time: true
-};
-
-const baseRequest = request.defaults(baseRequestOptions);
+const Monito = require('../lib/monito');
 
 class Shopper extends Monito {
 
@@ -30,9 +9,8 @@ class Shopper extends Monito {
     }
 
     call(options, done) {
-        baseRequest(options, (err, res, body) => {
-            done(err, body);
-        });
+        // Simulate a HTTP call to a backend server
+        setTimeout(done, 200);
     }
 
     register(done) {
@@ -99,7 +77,6 @@ chimp.on('transition', function (data) {
 
 chimp.on('end', function (data) {
     console.log('We stop at ' + data.finalState + '. Bye!');
-    server.close();
 });
 
 chimp.start();

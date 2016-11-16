@@ -55,6 +55,8 @@ See the [full code of the example](example/shopper/shopper.js).
 
 ## Usage
 
+Given:
+
 ```
 let monito = new Monito(options);
 monito.start();
@@ -85,14 +87,6 @@ The function `callback` has the following signature:
     * `finalState` (`String`) - Name of the state in which the monito stopped.
 
 ### API
-
-Given:
-
-```
-let monito = new Monito(options);
-```
-
-The following functions are available:
 
 * `monito.getTransitionChallenge() -> Function` - Gets the function currently used as a transition challenge.
 * `monito.setTransitionChallenge(Function challenge)` - Sets a custom challenge to be used in transitions. If the function returns _truthy_, the challenged will be passed. Otherwise, it won't.

@@ -68,14 +68,18 @@ monito.on('end', data => { });
 
 The options object expects the following properties:
 
+* `initialState` (`String`, mandatory) - Name of the initial state.
 * `states` (`Object`, mandatory) - The state descriptor. An object where every key is the name of a state and
 its value is a function with signature `(Function callback)`, whose scope is the monito instance itself. 
 The function `callback` has the following signature:
     * `callback([Object error[, Object savingThrows[, String defaultNextState]]])`
         * `error` (`Object`, optional) - Like in most of the callback signatures, an optional errorsis the first argument. `null` if everything went fine.
-        * `savingThrows` (`Object`, optional) - An object where the key is the name of a potential state candidate and the value is the difficulty of the saving throw to go into that state
-        * `defaultNextState` (`String`, optional) - Name of the default next state. If not present, the state machine will stop.
-* `initialState` (`String`, mandatory) - Name of the initial state.
+        * `savingThrows` (`Object`, optional) - An object where the key is the name of a possible next state candidate and its value is the difficulty of the saving throw to go into that state.
+        * `defaultNextState` (`String`, optional) - Name of the default next state, in case `savingThrows` is present and none of those savings are passed.
+There are three possible ways to make the callback:
+    * `callback(Object error, Object savingThrows, String defaultNextState)` - Performs the saving throws described in `savingThrows`; if all of them fail, the next state will be `defaultNextState`.
+    * `callback(Object error, String nextState)` - Goes right away to `nextState`.
+    * `callback(Object error)` and `callback()` - Ends the state machine.
  
 ### Events
 

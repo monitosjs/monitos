@@ -66,8 +66,10 @@ monito.on('end', data => { });
  
 ### Options
 
-* `states` (`Object`, mandatory) - The state descriptor. An object where the key is the name of the state and
-the value is a function with signature `(Function callback)`, whose `this` is the monito instance itself. 
+The options object expects the following properties:
+
+* `states` (`Object`, mandatory) - The state descriptor. An object where every key is the name of a state and
+its value is a function with signature `(Function callback)`, whose scope is the monito instance itself. 
 The function `callback` has the following signature:
     * `callback([Object error[, Object savingThrows[, String defaultNextState]]])`
         * `error` (`Object`, optional) - Like in most of the callback signatures, an optional errorsis the first argument. `null` if everything went fine.

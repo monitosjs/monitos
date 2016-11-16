@@ -10,27 +10,30 @@ A saving throw is a roll of 20-sided dice to determine if a specific transition 
 Example:
 
 ```javascript
-let chimp = new Monito({
-    register: (next) => {
-        next(null, 'getProfile');   // Go straight to the state "getProfile"
-    },
-    getProfile: (next) => {
-        next(null, {
-            browse: 4               // If your dice rolls 4 or more, go to "browse"
-        }, 'shop');                 // Otherwise, by default, go to "shop"
-    },
-    browse: (next) => {
-        next(null, {
-            browse: monito => 6     // You can also use functions
-        }, 'shop');                 
-    },
-    shop: (next) => {
-        next(null, 'logout');       // Go straight to the state "logout"
-    },
-    logout: (next) => {
-        next();                     // This will be the last state
+let chimp = new Monito({ 
+    initialState: 'register', 
+    states: {
+        register: (next) => {
+            next(null, 'getProfile');   // Go straight to the state "getProfile"
+        },
+        getProfile: (next) => {
+            next(null, {
+                browse: 4               // If your dice rolls 4 or more, go to "browse"
+            }, 'shop');                 // Otherwise, by default, go to "shop"
+        },
+        browse: (next) => {
+            next(null, {
+                browse: monito => 6     // You can also use functions
+            }, 'shop');                 
+        },
+        shop: (next) => {
+            next(null, 'logout');       // Go straight to the state "logout"
+        },
+        logout: (next) => {
+            next();                     // This will be the last state
+        }
     }
-}, 'register');                     // Initial state
+});                     
 
 chimp.start();
 ```
@@ -40,10 +43,13 @@ See the [full code of the example](example/shopper/shopper.js).
 ## Usage
 
 ```
-new Monito(states, initialState);
+let monito = new Monito(options);
+monito.start();
+monito.on('transition', data => { });
+monito.on('end', data => { });
 ```
  
-### Arguments
+### Options
 
 * `states` (`Object`, mandatory) - The state descriptor. An object where the key is the name of the state and
 the value is a function with signature `(Function callback)`, whose `this` is the monito instance itself. 
@@ -70,7 +76,7 @@ The function `callback` has the following signature:
 Given:
 
 ```
-var chimp = new Monito(states, initialState);
+let monito = new Monito(options);
 ```
 
 The following functions are available:

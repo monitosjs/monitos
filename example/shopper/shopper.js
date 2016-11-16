@@ -86,7 +86,7 @@ const states = {
     }
 };
 
-let chimp = new Shopper(states, 'register');
+let chimp = new Shopper({ states: states, initialState: 'register' });
 
 chimp.on('error', function (data) {
     console.log('An error has occurred in state ' + data.currentState);

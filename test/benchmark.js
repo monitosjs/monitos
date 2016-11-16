@@ -24,7 +24,7 @@ const suite = new Benchmark.Suite; // jshint ignore:line
 suite.add('default', {
     defer: true,
     fn: function (deferred) {
-        let chimp = new Monito(states, 'a');
+        let chimp = new Monito({ states: states, initialState: 'a' });
         chimp.on('end', function () {
             deferred.resolve();
         });

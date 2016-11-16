@@ -19,7 +19,7 @@ describe('Monitos', () => {
         it('Runs a state machine with no random transitions', next => {
             var rollSpy = sandbox.spy(d20, 'roll');
             var transitions = [];
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 register: (next) => {
                     next(null, 'getProfile');
                 },
@@ -35,7 +35,7 @@ describe('Monitos', () => {
                 logout: (next) => {
                     next();
                 }
-            }, 'register');
+            }, initialState: 'register' });
             chimp.start();
             chimp.on('transition', data => {
                 transitions.push(data);
@@ -71,7 +71,7 @@ describe('Monitos', () => {
         it('Does not matter the order in which we call on() and start()', next => {
             var rollSpy = sandbox.spy(d20, 'roll');
             var transitions = [];
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 register: (next) => {
                     next(null, 'getProfile');
                 },
@@ -87,7 +87,7 @@ describe('Monitos', () => {
                 logout: (next) => {
                     next();
                 }
-            }, 'register');
+            }, initialState: 'register'});
             chimp.on('transition', data => {
                 transitions.push(data);
             });
@@ -123,7 +123,7 @@ describe('Monitos', () => {
         it('Runs a state machine with random transitions', next => {
             var rollSpy = sandbox.spy(d20, 'roll');
             var transitions = [];
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 register: (next) => {
                     next(null, 'getProfile');
                 },
@@ -143,7 +143,7 @@ describe('Monitos', () => {
                 logout: (next) => {
                     next();
                 }
-            }, 'register');
+            }, initialState: 'register' });
             chimp.start();
             chimp.on('transition', data => {
                 transitions.push(data);
@@ -165,7 +165,7 @@ describe('Monitos', () => {
 
         it('Accepts functions as valid challenges, and the challenge is passed', next => {
             var transitions = [];
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 open: (next) => {
                     next(null, {
                         broken: (monito) => {
@@ -180,7 +180,7 @@ describe('Monitos', () => {
                 close: (next) => {
                     next();
                 }
-            }, 'open');
+            }, initialState: 'open' });
             chimp.start();
             chimp.on('transition', data => {
                 transitions.push(data);
@@ -206,7 +206,7 @@ describe('Monitos', () => {
 
         it('Accepts functions as valid challenges, and the challenge is failed', next => {
             var transitions = [];
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 open: (next) => {
                     next(null, {
                         broken: monito => {
@@ -221,7 +221,7 @@ describe('Monitos', () => {
                 close: (next) => {
                     next();
                 }
-            }, 'open');
+            }, initialState: 'open' });
             chimp.start();
             chimp.on('transition', data => {
                 transitions.push(data);
@@ -242,7 +242,7 @@ describe('Monitos', () => {
 
         it('Allows setting and getting a custom challenge, and this challenge is passed', next => {
             var transitions = [];
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 open: (next) => {
                     next(null, {
                         broken: (/* monito */) => {
@@ -256,7 +256,7 @@ describe('Monitos', () => {
                 close: (next) => {
                     next();
                 }
-            }, 'open');
+            }, initialState: 'open' });
             chimp.setTransitionChallenge(difficulty => {
                 return difficulty === 'pass';
             });
@@ -286,7 +286,7 @@ describe('Monitos', () => {
 
         it('Allows setting and getting a custom challenge, and this challenge is passed', next => {
             var transitions = [];
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 open: (next) => {
                     next(null, {
                         broken: (/* monito */) => {
@@ -300,7 +300,7 @@ describe('Monitos', () => {
                 close: (next) => {
                     next();
                 }
-            }, 'open');
+            }, initialState: 'open' });
             chimp.setTransitionChallenge(difficulty => {
                 return difficulty === 'pass';
             });
@@ -326,7 +326,7 @@ describe('Monitos', () => {
 
         it('Can be stopped on demand', next => {
             var transitions = [];
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 register: (next) => {
                     next(null, 'getProfile');
                 },
@@ -343,7 +343,7 @@ describe('Monitos', () => {
                 logout: (next) => {
                     next();
                 }
-            }, 'register');
+            }, initialState: 'register' });
             chimp.start();
             chimp.on('transition', data => {
                 transitions.push(data);
@@ -368,7 +368,7 @@ describe('Monitos', () => {
 
         it('Stops a challenge as soon as we have a success', next => {
             var transitions = [];
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 start: (next) => {
                     next(null, {
                         successGuaranteed: 0,
@@ -381,7 +381,7 @@ describe('Monitos', () => {
                 thisShouldNeverHappen: next => {
                     next();
                 }
-            }, 'start');
+            }, initialState: 'start' });
             chimp.start();
             chimp.on('transition', data => {
                 transitions.push(data);
@@ -407,11 +407,11 @@ describe('Monitos', () => {
     describe('Unhappy flows', () => {
 
         it('Handles errors', next => {
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 register: (next) => {
                     next(new Error('Something went wrong'));
                 }
-            }, 'register');
+            }, initialState: 'register' });
             chimp.start();
             chimp.on('error', err => {
                 expect(err).to.have.property('currentState', 'register');
@@ -424,26 +424,26 @@ describe('Monitos', () => {
 
         it('Requires the argument "options"', next => {
             var fn = () => {
-                new Monito();
+                new Monito({ initialState: 'foo' });
             };
-            expect(fn).to.throw(Error, /Missing argument "states"/);
+            expect(fn).to.throw(Error, /Missing option "states"/);
             next();
         });
 
-        it('Requires the argument "options.states"', next => {
+        it('Requires the argument "options.initialState"', next => {
             var fn = () => {
-                new Monito({
+                new Monito({ states: {
                     foo: (next) => {
                         next();
                     }
-                });
+                }});
             };
-            expect(fn).to.throw(Error, /Missing argument "startState"/);
+            expect(fn).to.throw(Error, /Missing option "initialState"/);
             next();
         });
 
         it('Requires a default next state when there are random transitions', next => {
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 register: (next) => {
                     next(null, 'getProfile');
                 },
@@ -455,7 +455,7 @@ describe('Monitos', () => {
                 shop: (next) => {
                     next();
                 }
-            }, 'register');
+            }, initialState: 'register' });
             chimp.start();
             chimp.on('error', err => {
                 expect(err).to.have.property('currentState', 'getProfile');
@@ -466,11 +466,11 @@ describe('Monitos', () => {
         });
 
         it('Fails when there is an unknown state', next => {
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 register: (next) => {
                     next(null, 'somethingUnknown');
                 }
-            }, 'register');
+            }, initialState: 'register' });
             chimp.start();
             chimp.on('error', err => {
                 expect(err).to.have.property('currentState', 'somethingUnknown');
@@ -489,7 +489,7 @@ describe('Monitos', () => {
             sandbox.stub(d20, 'roll', (/* dice */) => {
                 return difficulty + 1; // Passes the saving throw
             });
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 open: (next) => {
                     next(null, {
                         broken: 10
@@ -501,7 +501,7 @@ describe('Monitos', () => {
                 close: (next) => {
                     next();
                 }
-            }, 'open');
+            }, initialState: 'open' });
             chimp.start();
             chimp.on('transition', data => {
                 transitions.push(data);
@@ -531,7 +531,7 @@ describe('Monitos', () => {
             sandbox.stub(d20, 'roll', (/* dice */) => {
                 return difficulty - 1; // Fails the saving throw
             });
-            let chimp = new Monito({
+            let chimp = new Monito({ states: {
                 open: (next) => {
                     next(null, {
                         broken: difficulty
@@ -543,7 +543,7 @@ describe('Monitos', () => {
                 close: (next) => {
                     next();
                 }
-            }, 'open');
+            }, initialState: 'open' });
             chimp.start();
             chimp.on('transition', data => {
                 transitions.push(data);

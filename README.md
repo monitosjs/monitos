@@ -76,7 +76,8 @@ The function `callback` has the following signature:
         * `error` (`Object`, optional) - Like in most of the callback signatures, an optional errorsis the first argument. `null` if everything went fine.
         * `savingThrows` (`Object`, optional) - An object where the key is the name of a possible next state candidate and its value is the difficulty of the saving throw to go into that state.
         * `defaultNextState` (`String`, optional) - Name of the default next state, in case `savingThrows` is present and none of those savings are passed.
-There are three possible ways to make the callback:
+
+There are three possible ways to make this callback:
     * `callback(Object error, Object savingThrows, String defaultNextState)` - Performs the saving throws described in `savingThrows`; if all of them fail, the next state will be `defaultNextState`.
     * `callback(Object error, String nextState)` - Goes right away to `nextState`.
     * `callback(Object error)` and `callback()` - Ends the state machine.

@@ -88,17 +88,17 @@ const states = {
 
 let chimp = new Shopper(states, 'register');
 
-chimp.on('error', function (err) {
-    console.log('An error has occurred');
-    console.log(err);
+chimp.on('error', function (data) {
+    console.log('An error has occurred in state ' + data.currentState);
+    console.log(data.err);
 });
 
 chimp.on('transition', function (data) {
     console.log(data.previousState + ' -> ' + data.nextState);
 });
 
-chimp.on('end', function () {
-    console.log('Ok bye!');
+chimp.on('end', function (data) {
+    console.log('We stop at ' + data.finalState + '. Bye!');
     server.close();
 });
 

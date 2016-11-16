@@ -9,7 +9,8 @@
   "scripts": {
     "test": "gulp lint && gulp test",
     "precommit": "gulp lint",
-    "prepush": "gulp test"
+    "prepush": "gulp test",
+    "benchmark": "node test/benchmark"
   },
   "repository": {
     "type": "git",

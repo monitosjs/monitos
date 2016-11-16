@@ -40,7 +40,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'logout');
                 expect(rollSpy.callCount).to.equal(0);
                 expect(transitions).to.have.length(5);
                 expect(transitions[0]).to.deep.equal({
@@ -90,7 +91,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'logout');
                 expect(rollSpy.callCount).to.equal(0);
                 expect(transitions).to.have.length(5);
                 expect(transitions[0]).to.deep.equal({
@@ -146,7 +148,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'logout');
                 expect(rollSpy.callCount).to.be.at.least(1);
                 expect(transitions).to.have.length.least(4);
                 expect(transitions[0]).to.deep.equal({
@@ -182,7 +185,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'close');
                 expect(transitions).to.have.length(3);
                 expect(transitions[0]).to.deep.equal({
                     previousState: undefined,
@@ -222,7 +226,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'close');
                 expect(transitions[0]).to.deep.equal({
                     previousState: undefined,
                     nextState: 'open'
@@ -260,7 +265,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'close');
                 expect(transitions).to.have.length(3);
                 expect(transitions[0]).to.deep.equal({
                     previousState: undefined,
@@ -303,7 +309,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'close');
                 expect(transitions).to.have.length(2);
                 expect(transitions[0]).to.deep.equal({
                     previousState: undefined,
@@ -342,7 +349,8 @@ describe('Monitos', () => {
                 transitions.push(data);
             });
             var endCalled = false;
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'getProfile');
                 expect(endCalled).to.equal(false);
                 endCalled = true;
                 expect(transitions).to.have.length(2);
@@ -378,7 +386,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'successGuaranteed');
                 expect(transitions).to.have.length(2);
                 expect(transitions[0]).to.deep.equal({
                     previousState: undefined,
@@ -405,8 +414,10 @@ describe('Monitos', () => {
             }, 'register');
             chimp.start();
             chimp.on('error', err => {
-                expect(err).to.be.an('error');
-                expect(err).to.have.property('message', 'Something went wrong');
+                expect(err).to.have.property('currentState', 'register');
+                expect(err).to.be.an('object');
+                expect(err.err).to.be.an('error');
+                expect(err.err).to.have.property('message', 'Something went wrong');
                 next();
             });
         });
@@ -447,8 +458,9 @@ describe('Monitos', () => {
             }, 'register');
             chimp.start();
             chimp.on('error', err => {
-                expect(err).to.be.an('error');
-                expect(err).to.have.property('message', 'There is no default next state');
+                expect(err).to.have.property('currentState', 'getProfile');
+                expect(err.err).to.be.an('error');
+                expect(err.err).to.have.property('message', 'There is no default next state');
                 next();
             });
         });
@@ -461,8 +473,9 @@ describe('Monitos', () => {
             }, 'register');
             chimp.start();
             chimp.on('error', err => {
-                expect(err).to.be.an('error');
-                expect(err).to.have.property('message', 'Unknown monito state: somethingUnknown');
+                expect(err).to.have.property('currentState', 'somethingUnknown');
+                expect(err.err).to.be.an('error');
+                expect(err.err).to.have.property('message', 'Unknown monito state: somethingUnknown');
                 next();
             });
         });
@@ -493,7 +506,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'close');
                 expect(transitions).to.have.length(3);
                 expect(transitions[0]).to.deep.equal({
                     previousState: undefined,
@@ -534,7 +548,8 @@ describe('Monitos', () => {
             chimp.on('transition', data => {
                 transitions.push(data);
             });
-            chimp.on('end', () => {
+            chimp.on('end', data => {
+                expect(data).to.have.property('finalState', 'close');
                 expect(transitions).to.have.length(2);
                 expect(transitions[0]).to.deep.equal({
                     previousState: undefined,

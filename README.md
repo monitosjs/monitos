@@ -46,7 +46,7 @@ new Monito(states, initialState);
 ### Arguments
 
 * `states` (`Object`, mandatory) - The state descriptor. An object where the key is the name of the state and
-the value is a function with signature `(Function callback)`, whose `this` is the monito instanc itself. 
+the value is a function with signature `(Function callback)`, whose `this` is the monito instance itself. 
 The function `callback` has the following signature:
     * `callback([Object error[, Object savingThrows[, String defaultNextState]]])`
         * `error` (`Object`, optional) - Like in most of the callback signatures, an optional errorsis the first argument. `null` if everything went fine.
@@ -56,11 +56,14 @@ The function `callback` has the following signature:
  
 ### Events
 
-* `error(Object err)` - Whenever an error occurred. The first and only argument is the error object.
-* `transition(Object data)` - Fired when there is a transition to a new state. The object `data ` contains the two following `String` properties:
-    * `previousState` - Name of the previous state, `undefined` if this is the first transition of the state machine.
-    * `nextState` - Name of state the machine is transitioning to.
-* `end` - Fired when the state machine comes to an end.
+* `error(Object data)` - Whenever an error occurred. The object `data` contains the following properties:
+    * `err` (`Error`) 
+    * `currentState` (`String`) - The state in which the error took place. 
+* `transition(Object data)` - Fired when there is a transition to a new state. The object `data ` contains the following:
+    * `previousState` (`String`) - Name of the previous state, `undefined` if this is the first transition of the state machine.
+    * `nextState` (`String`) - Name of state the machine is transitioning to.
+* `end(Object data)` - Fired when the state machine comes to an end. The object `data` contains the following property:
+    * `finalState` (`String`) - Name of the state in which the monito stopped.
 
 ### API
 

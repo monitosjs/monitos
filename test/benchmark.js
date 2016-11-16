@@ -1,5 +1,7 @@
 'use strict';
 
+// Note: requires installing the modules `benchmark` and `microtime`
+
 const Benchmark = require('benchmark');
 
 const Monito = require('../lib/monito');

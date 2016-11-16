@@ -9,8 +9,7 @@
   "scripts": {
     "test": "gulp lint && gulp test",
     "precommit": "gulp lint",
-    "prepush": "gulp test",
-    "benchmark": "node test/benchmark"
+    "prepush": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -38,7 +37,6 @@
     "d20": "1.4.1"
   },
   "devDependencies": {
-    "benchmark": "2.1.2",
     "chai": "3.5.0",
     "gulp": "3.9.1",
     "gulp-istanbul": "1.1.1",
@@ -46,7 +44,6 @@
     "gulp-mocha": "3.0.1",
     "husky": "0.11.9",
     "jshint-stylish": "2.2.1",
-    "microtime": "2.1.1",
     "sinon": "1.17.6"
   }
 }

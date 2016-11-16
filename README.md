@@ -36,6 +36,19 @@ let chimp = new Monito({
 });                     
 
 chimp.start();
+
+chimp.on('transition', data => {
+    console.log(data.previousState + ' -> ' +data.nextState);
+});
+
+chimp.on('end', data => {
+    console.log('Stopped in state ' + data.finalState);
+});
+
+chimp.on('error', data => {
+    console.log('An error occurred in state ' + data.currentState);
+    console.log(data.err);
+});
 ```
 
 See the [full code of the example](example/shopper/shopper.js).
